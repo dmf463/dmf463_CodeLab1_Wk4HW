@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class FileIOScript : MonoBehaviour {
 
-    public string fileName = "Fracture.text";
-
     public List<string> linesOfFlight;
 
-    public int i;
+    public int listLine;
 
     public bool increasedCount;
 
@@ -35,7 +33,7 @@ public class FileIOScript : MonoBehaviour {
 	void Start () {
 
         Debug.Log("Path: " + Application.dataPath);
-        i = -1;
+        listLine = -1;
         increasedCount = false;
 
 
@@ -44,15 +42,18 @@ public class FileIOScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        string fileName = "fracture" + FileNumber + ".txt";
+
         Debug.Log("increasedCount is " + increasedCount);
 
-        string finalFilePath = Application.dataPath + "/TextFiles/" + fileName; //put the files in the right folder when it's written
+        string finalFilePath = Application.dataPath + "/TextFiles/" + fileName; //write a different file each time it starts up
+        Debug.Log(finalFilePath);
 
         StreamWriter sw = new StreamWriter(finalFilePath, true); //write to this file, and add onto it each time
 
         if (increasedCount == true)
         {
-            sw.WriteLine(linesOfFlight[i] + " ");
+            sw.WriteLine(linesOfFlight[listLine] + "                          ");
             increasedCount = false;
         }
 
@@ -64,6 +65,7 @@ public class FileIOScript : MonoBehaviour {
     {
         FileNumber += 1;
         Debug.Log("FileNumber = " + fileNumber);
+        
     }
 
     public void GetText(Transform currentBlock)
@@ -74,7 +76,7 @@ public class FileIOScript : MonoBehaviour {
         currentBlock = currentBlock.gameObject.transform.GetChild(0);
         linesOfFlight.Add(currentBlock.GetComponent<TextMesh>().text);
         increasedCount = true;
-        i += 1;
+        listLine += 1;
         
     }
 }
