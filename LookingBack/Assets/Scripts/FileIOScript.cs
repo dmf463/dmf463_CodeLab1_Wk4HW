@@ -5,13 +5,31 @@ using UnityEngine;
 
 public class FileIOScript : MonoBehaviour {
 
-    public string fileName = "temp.text";
+    public string fileName = "Fracture.text";
 
     public List<string> linesOfFlight;
 
     public int i;
 
     public bool increasedCount;
+
+    private const string FILE_NUMBER = "fileNum";
+    private int fileNumber;
+    public int FileNumber
+    {
+        get
+        {
+            fileNumber = PlayerPrefs.GetInt(FILE_NUMBER);
+            return fileNumber;
+        }
+        set
+        {
+            Debug.Log("Application Turned Off");
+            fileNumber = value;
+            PlayerPrefs.SetInt(FILE_NUMBER, fileNumber);
+            Debug.Log("FileNumber = " + fileNumber);
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +58,12 @@ public class FileIOScript : MonoBehaviour {
 
         sw.Close();
 
+    }
+
+    void OnApplicationQuit()
+    {
+        FileNumber += 1;
+        Debug.Log("FileNumber = " + fileNumber);
     }
 
     public void GetText(Transform currentBlock)
