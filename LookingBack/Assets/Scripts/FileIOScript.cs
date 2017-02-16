@@ -5,52 +5,29 @@ using UnityEngine;
 
 public class FileIOScript : MonoBehaviour {
 
-	public string fileName = "temp.txt";
+    public string fileName = "temp.text";
 
-	public List<string> gazedText;
+    public List<string> linesOfFlight;
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log("Path: " + Application.dataPath);
 
-		string finalFilePath = Application.dataPath + "/" + fileName;
+        Debug.Log("Path: " + Application.dataPath);
 
-        StreamWriter sw = new StreamWriter(finalFilePath, false);
+        string finalFilePath = Application.dataPath + "/TextFiles/" + fileName;
 
-        for (int i = 0; i < gazedText.Length; i++)
-        {
-            sw.WriteLine(gazedText[i] + " " + highScoreValues[i]);
-        }
+        //So I want to write the string from whatever I'm looking at into the list, so that I can then write it to the file. 
 
-        sw.Close();
-
-
-        StreamReader sr = new StreamReader(finalFilePath);
-
-		int i = 0;
-
-		while(!sr.EndOfStream){
-			string line = sr.ReadLine();
-
-			string[] splitLine = line.Split(' ');
-
-			string name = splitLine[0];
-			string value = splitLine[1];
-
-			Debug.Log("name: " + name);
-			Debug.Log("value: " + value);
-
-			gazedText.Add(name);
-			highScoreValues.Add(value);
-
-			i++;
-		}
-
-		sr.Close();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    public void GetText(Transform currentBlock)
+    {
+        currentBlock = currentBlock.gameObject.transform.GetChild(0);
+        linesOfFlight.Add(currentBlock.GetComponent<TextMesh>().text);
+    }
 }

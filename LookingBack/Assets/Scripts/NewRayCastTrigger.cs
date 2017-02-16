@@ -15,8 +15,14 @@ public class NewRayCastTrigger : MonoBehaviour {
 
     bool hasMoved = false;
 
+    GameObject textSaver;
+    FileIOScript fileScript;
+
 	// Use this for initialization
 	void Start () {
+
+        textSaver = GameObject.Find("TextSaver");
+        fileScript = textSaver.GetComponent<FileIOScript>();
 		
 	}
 	
@@ -41,6 +47,7 @@ public class NewRayCastTrigger : MonoBehaviour {
                     timeLookedAt = 0f;
                     onGazeComplete.Invoke();
                     hasMoved = true;
+                    fileScript.GetText(this.transform);
                 }
             }
         }
