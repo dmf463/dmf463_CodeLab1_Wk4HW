@@ -40,7 +40,7 @@ public class NewRayCastTrigger : MonoBehaviour {
         {
             if (rayHit.transform == this.transform) //are we looking at this thing
             {
-                Debug.Log("Hitting: " + this.gameObject.name);
+                //Debug.Log("Hitting: " + this.gameObject.name);
                 timeLookedAt = Mathf.Clamp01(timeLookedAt + Time.deltaTime); //after 1 second, this bariable will be 1f;
                 if (timeLookedAt == 1f && hasMoved == false)
                 {

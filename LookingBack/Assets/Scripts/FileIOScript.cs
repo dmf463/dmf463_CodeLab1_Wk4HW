@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class FileIOScript : MonoBehaviour {
+
+    GameObject[] textObjects;
+    List<int> usedIndeces;
 
     public List<string> linesOfFlight;
 
@@ -12,6 +17,7 @@ public class FileIOScript : MonoBehaviour {
     public bool increasedCount;
 
     private const string FILE_NUMBER = "fileNum";
+    private int resetValue = 0;
     private int fileNumber;
     public int FileNumber
     {
@@ -27,6 +33,7 @@ public class FileIOScript : MonoBehaviour {
             PlayerPrefs.SetInt(FILE_NUMBER, fileNumber);
             Debug.Log("FileNumber = " + fileNumber);
         }
+
     }
 
 	// Use this for initialization
@@ -36,8 +43,10 @@ public class FileIOScript : MonoBehaviour {
         listLine = -1;
         increasedCount = false;
 
+        textObjects = GameObject.FindGameObjectsWithTag("Text");
+        usedIndeces = new List<int>();
 
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -53,7 +62,7 @@ public class FileIOScript : MonoBehaviour {
 
         if (increasedCount == true)
         {
-            sw.WriteLine(linesOfFlight[listLine] + "                          ");
+            sw.WriteLine(linesOfFlight[listLine] + "*");
             increasedCount = false;
         }
 
@@ -78,5 +87,63 @@ public class FileIOScript : MonoBehaviour {
         increasedCount = true;
         listLine += 1;
         
+    }
+
+    public void ReadText()
+    {
+
+        string fileName = "fracture" + (FileNumber - 1) + ".txt";
+        string newFilePath = Application.dataPath + "/TextFiles/" + fileName;
+        StreamReader sr = new StreamReader(newFilePath);
+
+        Debug.Log("FileName for ReadText = " + fileName);
+
+        int i = 0;
+        string chosenLine = null;
+        string[] splitLine = null;
+        while (!sr.EndOfStream)
+        {
+            string line = sr.ReadToEnd();
+            splitLine = line.Split('*');
+            Debug.Log("Line read is: " + splitLine[0]);
+            chosenLine = splitLine[i];
+            Debug.Log("chosen line is: " + chosenLine);
+            i++;
+        }
+
+        sr.Close();
+
+        for (int j=0; j<splitLine.Length; j++)
+        {
+            Debug.Log(splitLine[j]);
+        }
+
+        for (int ii = 0; ii < textObjects.Length; ii++)
+        {
+                for (int iii = 0; iii < splitLine.Length; iii++)
+            {
+                if (textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<TextMesh>().text.Contains(splitLine[iii]))
+                {
+                    textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                }
+                else
+                {
+                    textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+            //Debug.Log("textObject[ii].name = " + textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<TextMesh>().text);
+            //if (textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<TextMesh>().text.Contains(chosenLine))
+            //{
+            //    textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+            //}
+            //else
+            //{
+            //    textObjects[ii].GetComponent<Transform>().GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+            //}
+        }
+
+
+
+
     }
 }
